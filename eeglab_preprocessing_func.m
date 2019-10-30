@@ -28,7 +28,6 @@ EEG.etc.eeglabvers = '14.1.1'; % this tracks which version of EEGLAB is being us
 
 % load raw data file
 EEG = pop_biosig([raw_data_dir, filesep, data_file, '.edf'], 'importevent','off');
-% EEG = pop_biosig('/data/david/LL_704f.edf', 'importevent','off','importannot','off');
 EEG.setname=data_file;
 EEG = eeg_checkset( EEG );
 if ismember('raw', output_prefs.files_to_save)
