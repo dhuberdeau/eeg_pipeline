@@ -1,0 +1,29 @@
+indir = '/gpfs/milgram/project/turk-browne/projects/vma_statlearning_iEEG/intermediate_data/';
+infile_set={...
+  {...
+  'MS_vma_part1_512hz.mat',...
+  'MS_vma_part2_512hz.mat',...
+  },...
+  {...
+  'MS_vma_part1_512hz.mat',...
+  'MS_vma_part2_512hz.mat',...
+  },...
+};
+
+outdir = '/gpfs/milgram/project/turk-browne/projects/vma_statlearning_iEEG/intermediate_data/';
+outfile_set = {'MS_vma_comb', 'MS_vma_comb'};
+
+intended_triggers_set = [15, 170];
+actual_triggers_set = [15, 170];
+channels_to_remove_set = {{},{},{},{},{}};
+for i_subject = 1:length(intended_triggers_set)
+  input_parameters(i_subject).intended_triggers = intended_triggers_set(i_subject);
+  input_parameters(i_subject).actual_triggers = actual_triggers_set(i_subject);
+  input_parameters(i_subject).channels_to_remove = channels_to_remove_set{i_subject};
+end
+
+for i_subject = 1:length(infile_set)
+  infile_cell = infile_set{i_subject};
+  outfile = outfile_set{i_subject};
+  call_combine(indir, infile_cell, outdir, outfile, input_parameters(i_subject));
+end

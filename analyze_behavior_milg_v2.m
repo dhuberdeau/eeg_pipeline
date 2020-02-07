@@ -13,19 +13,25 @@ k_tr = [1, 1, 1, 1, 1];
 k_tr_all = 1;
 for i_file = 1:length(data_files)
     load([data_dir, filesep, data_files{i_file}]);
-
     for i_tr = 1:length(Data.Type)
-         this_rt = ...
-            compute_RT(Data.time_targ_disp(i_tr), ...
-                Data.Kinematics{i_tr}(:, 1), ...
-                Data.Kinematics{i_tr}(:, 2) - 1440/2, ... %offset pixels x
-                Data.Kinematics{i_tr}(:, 3) - 900/2); %offset pixels y
-        k_tr(Data.Type(i_tr) + 1) = k_tr(Data.Type(i_tr) + 1) + 1;
-
-        rt_trial_all(k_tr_all, 1) = this_rt;
-        rt_trial_all(k_tr_all, 2) = Data.Type(i_tr);
-        rt_trial_all(k_tr_all, 3) = Data.Target(i_tr);
-        k_tr_all = k_tr_all + 1;
+        try
+            this_rt = ...
+                compute_RT(Data.time_targ_disp(i_tr), ...
+                    Data.Kinematics{i_tr}(:, 1), ...
+                    Data.Kinematics{i_tr}(:, 2) - 1440/2, ... %offset pixels x
+                    Data.Kinematics{i_tr}(:, 3) - 900/2); %offset pixels y
+        catch err__1
+            warning(err__1.message)
+            this_rt = nan;
+        end
+        try
+            k_tr(Data.Type(i_tr) + 1) = k_tr(Data.Type(i_tr) + 1) + 1;
+            rt_trial_all(k_tr_all, 1) = this_rt;
+            rt_trial_all(k_tr_all, 2) = Data.Type(i_tr);
+            rt_trial_all(k_tr_all, 3) = Data.Target(i_tr);
+            k_tr_all = k_tr_all + 1; 
+        end
+           
     end
 end
 rt_trial_all = rt_trial_all(1:(k_tr_all - 1), :);
